@@ -66,10 +66,10 @@ classdef MPC_Control_z < MPC_Control
             for i = 2:N-1
                 con = con + (x(:,i+1) == mpc.A*x(:,i) + mpc.B*u(:,i));
                 con = con + (M*u(:,i) <= m);
-                obj = obj + x(:,i)'*Q*x(:,i) + u(:,i)'*R*u(:,i);
+                obj = obj + (x(:,i)-xs)'*Q*(x(:,i)-xs) + (u(:,i)-us)'*R*(u(:,i)-us);
             end
             con = con + (Ff*x(:,N) <= ff);
-            obj = obj + x(:,N)'*Qf*x(:,N);
+            obj = obj + (x(:,N)-xs)'*Qf*(x(:,N)-xs);
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
@@ -109,11 +109,10 @@ classdef MPC_Control_z < MPC_Control
             M = [1;-1];
             m = [0.3;0.2];
             
-            con = [M*us <= m, xs == mpc.A*xs + mpc.B*us, ref == mpc.C*xs];
-            obj = us'*us;
+            con = [M*us <= m, xs == mpc.A*xs + mpc.B*us];
+            obj = (ref-mpc.C*xs)'*(ref-mpc.C*xs);
             
-            
-            
+             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             

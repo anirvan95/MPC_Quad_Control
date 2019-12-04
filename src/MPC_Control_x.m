@@ -21,7 +21,7 @@ classdef MPC_Control_x < MPC_Control
             
             % SET THE HORIZON HERE
             N = 30;
-            Q = eye(n);
+            Q = diag([10,10,10,100]);%pdf
             R = eye(m);
             
             % Predicted state and input trajectories
@@ -39,7 +39,7 @@ classdef MPC_Control_x < MPC_Control
             
             %State Constraints
             F = [0 1 0 0;0 -1 0 0];
-            f = [0.0035;0.0035];
+            f = [0.035;0.035];
             
             %Input Constraints
             M = [1;-1];
@@ -51,11 +51,11 @@ classdef MPC_Control_x < MPC_Control
             obj = u(:,1)'*R*u(:,1);
             for i = 2:N-1
                 con = con + (x(:,i+1) == mpc.A*x(:,i) + mpc.B*u(:,i));
-                con = con + (F*x(:,i) <= f) + (M*u(:,i) <= m);
-                obj = obj + x(:,i)'*Q*x(:,i) + u(:,i)'*R*u(:,i);
+                con = con + (M*u(:,i) <= m);
+                obj = obj + (x(:,i)-xs)'*Q*(x(:,i)-xs) + (u(:,i)-us)'*R*(u(:,i)-us);
             end
-            %con = con + (Ff*x(:,N) <= ff);
-            obj = obj + x(:,N)'*Qf*x(:,N);
+            con = con + (Ff*x(:,N) <= ff);
+            obj = obj + (x(:,N)-xs)'*Qf*(x(:,N)-xs);
             
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
@@ -91,14 +91,14 @@ classdef MPC_Control_x < MPC_Control
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
             %State Constraints
             F = [0 1 0 0;0 -1 0 0];
-            f = [0.0035;0.0035];
+            f = [0.035;0.035];
             
             %Input Constraints
             M = [1;-1];
             m = [0.3;0.3];
             
             con = [M*us <= m, F*xs<=f, xs == mpc.A*xs + mpc.B*us, ref == mpc.C*xs];
-            obj = us'*us;
+            obj = (ref-mpc.C*xs)'*(ref-mpc.C*xs);
             
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE

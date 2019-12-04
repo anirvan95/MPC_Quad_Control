@@ -17,5 +17,10 @@ while 1
         break
     end
 end
+%disp('Plotting Projection')
+%disp(mpc)
+%Xf.projection(1:2).plot();
+%Xf.projection(2:3).plot();
+%Xf.projection(3:4).plot();
 end
 
