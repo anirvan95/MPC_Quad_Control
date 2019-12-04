@@ -97,7 +97,7 @@ classdef MPC_Control_x < MPC_Control
             M = [1;-1];
             m = [0.3;0.3];
             
-            con = [M*us <= m, F*xs<=f, xs == mpc.A*xs + mpc.B*us, ref == mpc.C*xs];
+            con = [M*us <= m, F*xs<=f, xs == mpc.A*xs + mpc.B*us];
             obj = (ref-mpc.C*xs)'*(ref-mpc.C*xs);
             
             

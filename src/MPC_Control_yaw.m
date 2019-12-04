@@ -94,7 +94,7 @@ classdef MPC_Control_yaw < MPC_Control
             M = [1;-1];
             m = [0.2;0.2];
             
-            con = [M*us <= m, xs == mpc.A*xs + mpc.B*us, ref == mpc.C*xs];
+            con = [M*us <= m, xs == mpc.A*xs + mpc.B*us];
             obj = (ref-mpc.C*xs)'*(ref-mpc.C*xs);
             
             
