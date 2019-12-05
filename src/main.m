@@ -14,6 +14,7 @@ Tf = 200.0; % Time to simulate for
 
 %% System Formulation
 Ts = 1/5; %Sampling time for c2d
+BIAS = -0.1; %Disturbance term
 [xs,us] = quad.trim();
 sys = quad.linearize(xs, us);
 [sys_x, sys_y, sys_z, sys_yaw] = quad.decompose(sys, xs, us);
@@ -33,7 +34,8 @@ mpc_yaw = MPC_Control_yaw(sys_yaw, Ts);
 %     sol.uz(:,i) = mpc_z.get_u(sol.z(:,i),5);
 %     sol.z(:,i+1) = mpc_z.A*sol.z(:,i) + mpc_z.B*sol.uz(:,i);
 % end
-% subplot(2,2,1),plot(time_vect,sol.z(2,:),'r')
+% plot(time_vect,sol.z(2,:),'r')
+%subplot(2,2,1),plot(time_vect,sol.z(2,:),'r')
 % 
 % %x
 % sol.x(:,1) = [0;0;0;2];
@@ -63,5 +65,5 @@ mpc_yaw = MPC_Control_yaw(sys_yaw, Ts);
 % 
 % subplot(2,2,4), plot(time_vect,sol.yaw(2,:),'k')
 
-sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw);
+sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw,BIAS);
 quad.plot(sim);
