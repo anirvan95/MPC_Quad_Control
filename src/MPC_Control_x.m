@@ -25,6 +25,7 @@ classdef MPC_Control_x < MPC_Control
       % Predicted state and input trajectories
       x = sdpvar(n, N);
       u = sdpvar(m, N-1);
+      eps = sdpvar(m, N);
       
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,6 +42,7 @@ classdef MPC_Control_x < MPC_Control
       % Objective selection and terminal set selection
       Q = eye(n);%diag([0.2; 2; 0.1; 0.1]);
       R = eye(m);
+      Qeps = 100000*eye(m);
       Noise = zeros(n, m);
       
       % LQR for the terminal set
@@ -57,11 +59,11 @@ classdef MPC_Control_x < MPC_Control
       obj = u(:, 1)'*R*u(:, 1);
       for i=2:N-1
           con = con + (x(:, i+1) == mpc.A*x(:, i) + mpc.B*u(:, i));
-          con = con + (Ax*x(:, i) <= bx) + (Au*u(:, i) <= bu);
-          obj = obj + (x(:, i) - xs)'*Q*(x(:, i)-xs) + u(:, i)'*R*u(:, i);
+          con = con + (Au*u(:, i) <= bu) + (Ax*x(:, i) - eps(:, i) <= bx) + (-eps(:, i) <= 0);
+          obj = obj + (x(:, i) - xs)'*Q*(x(:, i)-xs) + u(:, i)'*R*u(:, i) + eps(:, i)'*Qeps*eps(:, i);
       end
-      con = con + (Af*x(:, N) <= bf);
-      obj = obj + (x(:, N)-xs)'*Slqr*(x(:, N)-xs);
+      con = con + (Af*x(:, N) - eps(:, N) <= bf) + (-eps(:, N) <= 0);
+      obj = obj + (x(:, N)-xs)'*Slqr*(x(:, N)-xs) + eps(:, N)'*Qeps*eps(:, N);
       
       % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

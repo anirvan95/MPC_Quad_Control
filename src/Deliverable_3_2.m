@@ -34,6 +34,6 @@ sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref_yaw);
 quad.plot(sim);
 
 %% plt-ref
-ref = @(t, x) [2; 2; 2; 0];
+ref = @(t, x) [5; 4; 5; pi/4];
 sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref);
 quad.plot(sim);

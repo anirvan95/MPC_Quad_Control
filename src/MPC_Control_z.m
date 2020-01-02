@@ -72,7 +72,7 @@ classdef MPC_Control_z < MPC_Control
           con = con + (Au*u(:, i) <= bu);
           obj = obj + (x(:, i)-xs)'*Q*(x(:, i)-xs) + u(:, i)'*R*u(:, i);
       end
-      %con = con + (Af*x(:, N) <= bf);
+      % con = con + (Af*x(:, N) <= bf);
       obj = obj + (x(:, N)-xs)'*Slqr*(x(:, N)-xs);
       
       
