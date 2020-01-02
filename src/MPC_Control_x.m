@@ -20,7 +20,7 @@ classdef MPC_Control_x < MPC_Control
       us = sdpvar(m, 1);
       
       % SET THE HORIZON HERE
-      N = 20;
+      N = 50;
       
       % Predicted state and input trajectories
       x = sdpvar(n, N);
@@ -39,7 +39,7 @@ classdef MPC_Control_x < MPC_Control
       bu = [0.3; 0.3];
       
       % Objective selection and terminal set selection
-      Q = eye(n);
+      Q = eye(n);%diag([0.2; 2; 0.1; 0.1]);
       R = eye(m);
       Noise = zeros(n, m);
       

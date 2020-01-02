@@ -54,12 +54,12 @@ classdef Quad
     %
     % Simulate the nonlinear quadcopter to track an MPC reference
     %
-    function sim = sim(quad, ctrl_x, ctrl_y, ctrl_z, ctrl_yaw, input_bias)
+    function sim = sim(quad, ctrl_x, ctrl_y, ctrl_z, ctrl_yaw, input_bias, ref)
       sim.t = 0;
       sim.x = zeros(12,1);
       sim.z_hat = zeros(3,1); % Offset free for z-dimension
       Ts = quad.Ts;
-      Tf = 40;
+      Tf = 15;
       
       if nargin >= 3
         ctrl = quad.merge_controllers(ctrl_x, ctrl_y, ctrl_z, ctrl_yaw);
@@ -67,7 +67,7 @@ classdef Quad
         ctrl = ctrl_x;
         ctrl_z.L = [];
       end
-      ref = @(t,x) quad.MPC_ref(t, Tf);
+      if nargin < 7, ref = @(t,x) quad.MPC_ref(t, Tf); end
       
       if nargin < 6, input_bias = 0; end
       
