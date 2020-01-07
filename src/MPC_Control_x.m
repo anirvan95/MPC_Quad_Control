@@ -20,7 +20,7 @@ classdef MPC_Control_x < MPC_Control
       us = sdpvar(m, 1);
       
       % SET THE HORIZON HERE
-      N = 50;
+      N = 100;
       
       % Predicted state and input trajectories
       x = sdpvar(n, N);
