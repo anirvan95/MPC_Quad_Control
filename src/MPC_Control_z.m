@@ -143,7 +143,7 @@ classdef MPC_Control_z < MPC_Control
       A_bar = [mpc.A mpc.B; zeros(1, nx) 1];
       B_bar = [mpc.B; zeros(nd)];
       C_bar = [mpc.C zeros(nd)];
-      L = -place(A_bar', C_bar', [0.3, 0.5, 0.6])';
+      L = -place(A_bar', C_bar', [0.5, 0.6, 0.7])';
       
       % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

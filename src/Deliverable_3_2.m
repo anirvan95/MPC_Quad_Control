@@ -26,7 +26,7 @@ sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref_y);
 quad.plot(sim);
 
 %% plt-Z
-sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref_z);
+sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, -0.1, ref_z);
 quad.plot(sim);
 
 %% plt-yaw
