@@ -67,8 +67,10 @@ classdef Quad
         ctrl = ctrl_x;
         ctrl_z.L = [];
       end
-      if nargin < 7, ref = @(t,x) quad.MPC_ref(t, Tf); end
-      
+      %if nargin < 7, ref = @(t,x) quad.MPC_ref(t, Tf); end
+
+      if nargin < 7, ref = @(t,x) [-2; 0; 0; 0]; end
+
       if nargin < 6, input_bias = 0; end
       
       fprintf('Simulating...\n');

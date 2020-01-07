@@ -34,7 +34,7 @@ classdef MPC_Control_z < MPC_Control
       d_est = sdpvar(1);
 
       % SET THE HORIZON HERE
-      N = 50;
+      N = 100;
       
       % Predicted state and input trajectories
       x = sdpvar(n, N);
@@ -65,10 +65,10 @@ classdef MPC_Control_z < MPC_Control
       [Af, bf] = double(Xf);      
 
       % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-      con = (x(:, 2) == mpc.A*x(:, 1) + mpc.B*u(:, 1)) + (Au*u(:, 1) <= bu);
+      con = (x(:, 2) == mpc.A*x(:, 1) + mpc.B*u(:, 1) + + mpc.B*d_est) + (Au*u(:, 1) <= bu);
       obj = u(:, 1)'*R*u(:, 1);
       for i=2:N-1
-          con = con + (x(:, i+1) == mpc.A*x(:, i) + mpc.B*u(:, i));
+          con = con + (x(:, i+1) == mpc.A*x(:, i) + mpc.B*u(:, i) + mpc.B*d_est);
           con = con + (Au*u(:, i) <= bu);
           obj = obj + (x(:, i)-xs)'*Q*(x(:, i)-xs) + u(:, i)'*R*u(:, i);
       end
@@ -143,7 +143,7 @@ classdef MPC_Control_z < MPC_Control
       A_bar = [mpc.A mpc.B; zeros(1, nx) 1];
       B_bar = [mpc.B; zeros(nd)];
       C_bar = [mpc.C zeros(nd)];
-      L = -place(A_bar', C_bar', [0.5, 0.6, 0.7])';
+      L = -place(A_bar', C_bar', [0.4, 0.5, 0.6])';
       
       % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -16,23 +16,27 @@ ref_x = @(t, x) [-2; 0; 0; 0];
 ref_y = @(t, x) [0; -2; 0; 0];
 ref_z = @(t, x) [0; 0; -2; 0];
 ref_yaw = @(t, x) [0; 0; 0; pi/4];
+
+%% Bias for the offset-free tracking 
+BIAS = -0.1;
+
 %% plt-X
-sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref_x);
+sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, BIAS, ref_x);
 quad.plot(sim);
 
 %% plt-Y
-sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref_y);
+sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, BIAS, ref_y);
 quad.plot(sim);
 
 %% plt-Z
-sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, -0.1, ref_z);
+sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, BIAS, ref_z);
 quad.plot(sim);
 
 %% plt-yaw
-sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref_yaw);
+sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, BIAS, ref_yaw);
 quad.plot(sim);
 
 %% plt-ref
-ref = @(t, x) [5; 1; 1; -pi/4];
-sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, 0, ref);
+ref = @(t, x) [-0.5; -1; 1; -pi/4];
+sim = quad.sim(mpc_x, mpc_y, mpc_z, mpc_yaw, BIAS, ref);
 quad.plot(sim);
