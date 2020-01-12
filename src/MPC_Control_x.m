@@ -20,8 +20,8 @@ classdef MPC_Control_x < MPC_Control
             us = sdpvar(m, 1);
             
             % SET THE HORIZON HERE
-            N = 30;
-            Q = diag([10,10,10,100]);%pdf
+            N = 50;
+            Q = eye(n);%diag([10,10,10,100]);%pdf
             R = eye(m);
             
             % Predicted state and input trajectories
@@ -51,7 +51,7 @@ classdef MPC_Control_x < MPC_Control
             obj = u(:,1)'*R*u(:,1);
             for i = 2:N-1
                 con = con + (x(:,i+1) == mpc.A*x(:,i) + mpc.B*u(:,i));
-                con = con + (M*u(:,i) <= m);
+                con = con + (M*u(:,i) <= m)+ (F*x(:,i) <= f);
                 obj = obj + (x(:,i)-xs)'*Q*(x(:,i)-xs) + (u(:,i)-us)'*R*(u(:,i)-us);
             end
             con = con + (Ff*x(:,N) <= ff);
@@ -85,7 +85,7 @@ classdef MPC_Control_x < MPC_Control
             
             % Reference position (Ignore this before Todo 3.2)
             ref = sdpvar;
-            
+
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
@@ -97,10 +97,11 @@ classdef MPC_Control_x < MPC_Control
             M = [1;-1];
             m = [0.3;0.3];
             
-            con = [M*us <= m, F*xs<=f, xs == mpc.A*xs + mpc.B*us];
-            obj = (ref-mpc.C*xs)'*(ref-mpc.C*xs);
+            con = (xs == (mpc.A*xs + mpc.B*us)) + (ref == mpc.C*xs);      
+            con = con + (M*us <= m) + (F*xs<=f);
+            obj = us'*us;
             
-            
+         
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             

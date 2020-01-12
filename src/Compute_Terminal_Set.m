@@ -17,10 +17,17 @@ while 1
         break
     end
 end
-%disp('Plotting Projection')
-%disp(mpc)
-%Xf.projection(1:2).plot();
-%Xf.projection(2:3).plot();
-%Xf.projection(3:4).plot();
+% disp('Plotting Projection')
+% if(size(mpc.A,2)>2)
+%     figure,
+%     subplot(1,3,1),Xf.projection(1:2).plot('alpha',0.9,'linewidth',3,'color','r');
+%     hold on
+%     subplot(1,3,2),Xf.projection(2:3).plot('alpha',0.9,'linewidth',3,'color','g');
+%     subplot(1,3,3),Xf.projection(3:4).plot('alpha',0.9,'linewidth',3,'color','b');
+% else
+%     figure,
+%     Xf.plot('alpha',0.2,'linewidth',3,'color','k')
+% end
+
 end
 

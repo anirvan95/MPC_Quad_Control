@@ -20,9 +20,9 @@ classdef MPC_Control_yaw < MPC_Control
             us = sdpvar(m, 1);
             
             % SET THE HORIZON HERE
-            N = 10;
-            Q = 10*eye(n);
-            R = 1*eye(m);
+            N = 50;
+            Q = eye(n);
+            R = eye(m);
             
             % Predicted state and input trajectories
             x = sdpvar(n, N);
@@ -85,7 +85,7 @@ classdef MPC_Control_yaw < MPC_Control
             
             % Reference position (Ignore this before Todo 3.2)
             ref = sdpvar;
-            
+        
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
@@ -94,8 +94,9 @@ classdef MPC_Control_yaw < MPC_Control
             M = [1;-1];
             m = [0.2;0.2];
             
-            con = [M*us <= m, xs == mpc.A*xs + mpc.B*us];
-            obj = (ref-mpc.C*xs)'*(ref-mpc.C*xs);
+            con = (xs == (mpc.A*xs + mpc.B*us)) + (ref == mpc.C*xs);      
+            con = con + (M*us <= m) ;
+            obj = us'*us;
             
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE

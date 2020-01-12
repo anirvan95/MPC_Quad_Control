@@ -54,22 +54,30 @@ classdef Quad
     %
     % Simulate the nonlinear quadcopter to track an MPC reference
     %
-    function sim = sim(quad, ctrl_x, ctrl_y, ctrl_z, ctrl_yaw, input_bias, ref)
+    function sim = sim(quad, ref_in, ctrl_x, ctrl_y, ctrl_z, ctrl_yaw, input_bias)
       sim.t = 0;
       sim.x = zeros(12,1);
       sim.z_hat = zeros(3,1); % Offset free for z-dimension
       Ts = quad.Ts;
-      Tf = 15;
+      Tf = 40;
       
-      if nargin >= 3
+      if nargin >= 4
         ctrl = quad.merge_controllers(ctrl_x, ctrl_y, ctrl_z, ctrl_yaw);
       else
         ctrl = ctrl_x;
         ctrl_z.L = [];
       end
-      if nargin < 7, ref = @(t,x) quad.MPC_ref(t, Tf); end
       
       if nargin < 6, input_bias = 0; end
+      
+      if isempty(ref_in) 
+          ref = @(t,x) quad.MPC_ref(t, Tf);
+          fprintf('Simulating MPC trajectory\n');          
+      else
+          ref = ref_in; %adding reference
+          Tf = 15;
+          fprintf('Simulating user defined trajectory\n'); 
+      end
       
       fprintf('Simulating...\n');
       tic

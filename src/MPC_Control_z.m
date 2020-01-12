@@ -59,7 +59,7 @@ classdef MPC_Control_z < MPC_Control
             m = [0.3;0.2];
             
             [Xf,Qf] = Compute_Terminal_Set(M,m,F,f,mpc,Q,R);
-            %[Ff,ff] = double(Xf);
+            [Ff,ff] = double(Xf);
             
             con = (x(:,2) == mpc.A*x(:,1) + mpc.B*u(:,1) + mpc.B*d_est);
             con = con + (M*u(:,1) <= m);
@@ -99,7 +99,7 @@ classdef MPC_Control_z < MPC_Control
             
             % Reference position (Ignore this before Todo 3.3)
             ref = sdpvar;
-            
+           
             % Disturbance estimate (Ignore this before Part 5)
             d_est = sdpvar(1);
             
@@ -110,8 +110,9 @@ classdef MPC_Control_z < MPC_Control
             M = [1;-1];
             m = [0.3;0.2];
             
-            con = [M*us <= m, xs == mpc.A*xs + mpc.B*us + mpc.B*d_est];
-            obj = (ref-mpc.C*xs)'*(ref-mpc.C*xs);
+            con = (xs == (mpc.A*xs + mpc.B*us + mpc.B*d_est)) + (ref == mpc.C*xs);      
+            con = con + (M*us <= m);
+            obj = us'*us;     
             
              
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
@@ -126,6 +127,7 @@ classdef MPC_Control_z < MPC_Control
         % Compute augmented system and estimator gain for input disturbance rejection
         function [A_bar, B_bar, C_bar, L] = setup_estimator(mpc)
             
+      
             %%% Design the matrices A_bar, B_bar, L, and C_bar
             %%% so that the estimate x_bar_next [ x_hat; disturbance_hat ]
             %%% converges to the correct state and constant input disturbance
