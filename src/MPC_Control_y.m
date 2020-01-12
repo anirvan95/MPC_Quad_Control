@@ -20,9 +20,9 @@ classdef MPC_Control_y < MPC_Control
             us = sdpvar(m, 1);
             
             % SET THE HORIZON HERE
-            N = 50;
+            N = 20;
             Q = eye(n);
-            R = eye(m);
+            R = 5*eye(m);
             
             % Predicted state and input trajectories
             x = sdpvar(n, N);
